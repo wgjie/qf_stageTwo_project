@@ -1,0 +1,29 @@
+.top{
+    height: 80px;
+    background-color: #00f;
+}
+*{
+    padding:0;
+    margin:0;
+}
+
+.logo{
+    float:left;
+}
+
+.logininfo{
+    float:right;
+    height:80px;
+    color:#fff;
+    width: 200px;
+    border-left:#eee;
+}
+.logininfo marquee{
+    height:80px;
+    line-height:80px;
+}
+.logininfo span{
+    color:#f00;
+    font-weight: bold;
+    font-size: 20px;
+}

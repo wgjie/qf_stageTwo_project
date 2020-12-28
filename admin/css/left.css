@@ -1,0 +1,38 @@
+*{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    color:#666;
+    text-align: center;
+    cursor: pointer;
+}
+ul li h2{
+    font-size: 20px;
+    line-height:40px;
+}
+.show{
+    display:block;
+}
+.hide{
+    display:none;
+}
+.active{
+    background-color: #f00;
+    color:#fff;
+}
+ul li ol{
+    line-height:30px;
+    display:none;
+}
+html,body{
+    background-color: pink;
+}
+ul li ol li{
+    background-color: #ff0;
+    
+}
+ul li ol li a{
+    color:rgba(255,0,0,.7);
+    font-weight: bold;
+}

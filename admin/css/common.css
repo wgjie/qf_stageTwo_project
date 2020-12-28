@@ -1,0 +1,29 @@
+form{
+    width: 500px;
+    margin:0 auto;
+}
+form table{
+    margin:0 auto;
+}
+form table tr{
+    height: 40px;
+}
+form table tr td:first-child{
+    text-align: right;
+}
+form table tr input{
+    width: 220px;
+    height: 30px;
+    line-height:30px;
+    border:none;
+    outline:none;
+    border:1px solid #ccc;
+    padding-left:8px;
+}
+form table tr input[type="submit"],form table tr input[type="reset"]{
+    width: 80px;
+    padding:0;
+}
+form table tr input[type="submit"]:hover,form table tr input[type="reset"]:hover{
+    cursor: pointer;
+}

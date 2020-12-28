@@ -1,0 +1,230 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>修改商品</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/layer/layer.js"></script>
+    <script src="./js/cookie.js"></script>
+    <script src="./js/checkLogin.js"></script>
+    <style>
+    select{
+        width: 220px;
+        height: 30px;
+        line-height: 30px;
+        outline:none;
+        border:1px solid #ccc;
+    }
+    input[type="radio"]{
+        width: 15px;
+        height: 15px;
+    }
+    button{
+        width: 30px;
+        height: 30px;
+        margin-left:12px;
+    }
+    </style>
+</head>
+<body>
+<center>
+<form action="">
+    <table>
+        <caption><h2>商品修改</h2></caption>
+        <tr>
+            <td>商品名称：</td>
+            <td><input type="text" name="goodsname" placeholder="请输入商品名称"></td>
+        </tr>
+        <tr>
+            <td>分类：</td>
+            <td>
+                <select name="cat">
+                    <option value="0">请选择分类</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>商品价格：</td>
+            <td><input type="text" name="price" placeholder="请输入商品价格"></td>
+        </tr>
+        <tr>
+            <td>商品图片：</td>
+            <td class="img">
+                <input type="text" name="imgs[]" placeholder="请输入商品图片路径"><button type="button" class="add">+</button>
+            </td>
+        </tr>
+        <tr>
+            <td>商品描述：</td>
+            <td><textarea name="introduce" cols="30" rows="10"></textarea></td>
+        </tr>
+        <tr>
+            <td>商品库存：</td>
+            <td><input type="text" name="stock" placeholder="请输入商品库存"></td>
+        </tr>
+        <tr>
+            <td>是否首页显示：</td>
+            <td>
+                <input type="radio" name="isshowindex" value="0">否
+                <input type="radio" name="isshowindex" value="1">是
+            </td>
+        </tr>
+        <tr>
+            <td><input type="hidden" name="id"></td>
+            <td><input type="submit" value="修改"></td>
+        </tr>
+    </table>
+</form>
+</center>
+</body>
+<script>
+var loadindex = layer.load(1, {shade: [0.9,'#000']})
+var id = location.search.match(/id=(\d+)/)[1]
+$.ajax({
+    url:'php/getOneGoods.php',
+    data:{
+        id:id
+    },
+    dataType:"json",
+    success(res){
+        var {meta:{status,msg},data} = res;
+        if(status===0){
+            $('[name="goodsname"]').val(data.name)
+            var arr = data.imgpath.split('==========')
+            var html = '';
+            for(var i=0;i<arr.length;i++){
+                html += `
+                    <input type="text" name="imgs[]" value="${arr[i]}" placeholder="请输入商品图片路径">
+                `
+                if(i==0){
+                    html += '<button type="button" class="add">+</button>'
+                }else{
+                    html += '<button type="button" class="reduce">-</button>'
+                }
+            }
+            $('.img').html(html)
+            $('[name="introduce"]').val(data.introduce)
+            $('[name="price"]').val(data.price)
+            $('[name="stock"]').val(data.stock)
+            $('[name="id"]').val(data.id)
+
+            $('[name="isshowindex"]').each(function(i,v){
+                $(v).prop('checked',false);
+                if($(v).val() == data.isshowindex){
+                    $(v).prop('checked',true);
+                }
+            })
+            pid = data.pid
+            $.ajax({
+                url:'./php/getAllCats.php',
+                dataType:'json',
+                success(res){
+                    var {meta:{status,msg},data} = res;
+                    if(status===0){
+                        var html = $('[name="cat"]').html();
+                        for(var i=0;i<data.length;i++){
+                            if(data[i].id==pid){
+                                html += `
+                                    <option selected value="${data[i].id}">${data[i].name}</option>
+                                `
+                            }else{
+                                html += `
+                                    <option value="${data[i].id}">${data[i].name}</option>
+                                `
+                            }
+                        }
+                        $('[name="cat"]').html(html)
+                        layer.close(loadindex)
+                    }else{
+                        layer.close(loadindex)
+                        layer.msg(msg,{icon:2,time:1500})
+                    }
+                }
+            })
+        }else{
+            layer.close(loadindex)
+            layer.msg(msg,{icon:2,time:1500})
+        }
+    }
+})
+
+$('.img').on('click','.add',function(){
+    var br = $('<br>')
+    $('.img').append(br)
+    var inputTag = $(this).prev().clone()
+    inputTag.attr('name','imgs[]');
+    inputTag.val('')
+    $('.img').append(inputTag)
+    var reduce = $('<button class="reduce">-</button>')
+    $('.img').append(reduce)
+})
+$('.img').on('click','.reduce',function(){
+    $(this).prev().remove()
+    $(this).remove()
+})
+
+$('form').on('submit',function(){
+    if($('[name="goodsname"]').val() === ''){
+        layer.msg('商品名称不能为空',{icon:2,time:1500})
+        return false
+    }
+    if($('[name="cat"]').val() === '0'){
+        layer.msg('请选择商品分类',{icon:2,time:1500})
+        return false
+    }
+    if($('[name="price"]').val() === ''){
+        layer.msg('商品价格不能为空',{icon:2,time:1500})
+        return false
+    }
+    // 商品图片
+    if($('[name="imgs[]"]').val() === ''){
+        layer.msg('商品图片不能为空',{icon:2,time:1500})
+        return false
+    }
+    // 商品描述
+    if($('[name="introduce"]').val() === ''){
+        layer.msg('商品描述不能为空',{icon:2,time:1500})
+        return false
+    }
+    if($('[name="stock"]').val() === ''){
+        layer.msg('商品库存不能为空',{icon:2,time:1500})
+        return false
+    }
+    var loadindex = layer.load(1, {shade: [0.9,'#000']})
+    var imgs = '';
+    var f = '';
+    $('.img input').each(function(i,v){
+        imgs += f + $(v).val()
+        f = '==========';
+    })
+    $.ajax({
+        url:'php/goodsEdit.php',
+        type:"post",
+        dataType:"json",
+        data:{
+            goodsname:$('[name="goodsname"]').val(),
+            cat:$('[name="cat"]').val(),
+            price:$('[name="price"]').val(),
+            imgs:imgs,
+            introduce:$('[name="introduce"]').val(),
+            stock:$('[name="stock"]').val(),
+            isshowindex:$('[name="isshowindex"]').val(),
+            id:$('[name="id"]').val()
+        },
+        success:res=>{
+            var {meta:{status,msg}} = res;
+            layer.close(loadindex)
+            if(status===0){
+                layer.msg(msg,{icon:1,time:1500},function(){
+                    location.href = 'goodsList.html';
+                })
+            }else{
+                layer.msg(msg,{icon:2,time:1500})
+            }
+            
+        }
+    })
+    return false;
+})
+</script>
+</html>

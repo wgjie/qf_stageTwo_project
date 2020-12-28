@@ -1,0 +1,209 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>添加分类</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/layer/layer.js"></script>
+    <script src="./js/cookie.js"></script>
+    <script src="./js/checkLogin.js"></script>
+    <style>
+    select{
+        width: 220px;
+        height: 30px;
+        line-height: 30px;
+        outline:none;
+        border:1px solid #ccc;
+    }
+    </style>
+</head>
+<body>
+<center>
+<form action="">
+    <table>
+        <caption><h2>分类修改</h2></caption>
+        <tr>
+            <td>当前分类的级别：</td>
+            <td>
+                <select name="catLevel">
+                    <option value="0">请选择分类级别</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>父分类：</td>
+            <td>
+                <select name="parentCat">
+                    <option>请选择父分类</option>
+                    <option value="1">中国</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>分类名称：</td>
+            <td><input type="text" name="name" placeholder="请输入分类名称"></td>
+        </tr>
+        <tr>
+            <td><input type="hidden" name="id" value="0"></td>
+            <td><input type="submit" value="修改"></td>
+        </tr>
+    </table>
+</form>
+</center>
+</body>
+<script>
+$('form').on('submit',function(){
+    var loadindex = layer.load(1, {shade: [0.9,'#000']})
+    $.ajax({
+        url:'./php/editCat.php',
+        type:"post",
+        dataType:"json",
+        data:{
+            pid:$('[name="parentCat"]').val(),
+            name:$('[name="name"]').val(),
+            id:$('[name="id"]').val()
+        },
+        success(res){
+            var {meta:{status,msg}} = res;
+            if(status==0){
+                layer.close(loadindex)
+                layer.msg(msg,{icon:1,time:1500},function(){
+                    location.href = 'goodsCat.html';
+                })
+            }else{
+                layer.close(loadindex)
+                layer.msg(msg,{icon:2,time:1500},)
+            }
+        }
+    })
+    return false;
+})
+var loadindex = layer.load(1, {shade: [0.9,'#000']})
+$.ajax({
+    url:"./php/getAllCats.php",
+    type:"get",
+    dataType:'json',
+    success(res){
+        var {meta:{status,msg},data} = res;
+        if(status!==0){
+            layer.close(loadindex)
+            layer.msg(msg,{icon:2,time:1500},function(){
+                location.href = 'goodsCat.html';
+            })
+            return false;
+        }else{
+            // 过滤出所有的一级分类
+            var arr = data.filter(v=>v.pid==1);
+            // 获取当前分类
+            var id = location.search.match(/id=(\d+)/)[1];
+            $("[name='name']").val(data.find(v=>v.id==id).name)
+            $('input[type="hidden"]').val(id)
+            // 获取当前分类的级别
+            var nowlevel = getNowLevel(id,data,arr,level=0);
+            if(nowlevel==0){
+                nowlevel=1
+            }
+            var level = getLevel(data,arr)
+            var html = '';
+            for(var i=1;i<=level;i++){
+                if(i==nowlevel){
+                    html += `
+                        <option value="${i}" selected>${i}级分类</option>
+                    `
+                }else{
+                    html += `
+                        <option value="${i}">${i}级分类</option>
+                    `
+                }
+            }
+            $('[name="catLevel"]')[0].innerHTML += html
+            $('[name="catLevel"]').on('change','',[data,arr,data.find(v=>v.id==id).pid],changeLevel)
+            $('[name="catLevel"]').trigger('change','',[data,arr,data.find(v=>v.id==id).pid],changeLevel)
+            layer.close(loadindex)
+        }
+    }
+});
+function changeLevel(e){
+    var e = e || window.event;
+    if(this.value!=1){
+        var data = getCat(e.data[0],e.data[1],this.value-1)
+        var html = '<option>请选择父分类</option>';
+        for(var i=0;i<data.length;i++){
+            if(data[i].id==e.data[2]){
+                html += `
+                    <option selected value="${data[i].id}">${data[i].name}</option>
+                `
+            }else{
+                html += `
+                    <option value="${data[i].id}">${data[i].name}</option>
+                `
+            }
+            
+        }
+        $('[name="parentCat"]').html(html)
+    }else{
+        var html = '<option>请选择父分类</option>';
+        html += `
+            <option value="1" selected>中国</option>
+        `
+        $('[name="parentCat"]').html(html)
+    }
+}
+// 根据级别获取分类
+function getCat(data,arr,level){
+    level--
+    var brr = []
+    for(var i=0;i<arr.length;i++){
+        for(var j=0;j<data.length;j++){
+            if(data[j].pid===arr[i].id){
+                brr.push(data[j])
+            }
+        }
+    }
+    if(level==0){
+        return arr;
+    }else{
+        return getCat(data,brr,level)
+    }
+}
+// 获取所有级别
+function getLevel(data,arr,level=0){
+    var brr = [];
+    for(var i=0;i<arr.length;i++){
+        for(var j=0;j<data.length;j++){
+            if(data[j].pid===arr[i].id){
+                brr.push(data[j])
+            }
+        }
+    }
+    if(brr.length!==0){
+        level++;
+        return getLevel(data,brr,level)
+    }else{
+        return level
+    }
+}
+// 获取当前级别
+function getNowLevel(id,data,arr,level=0){
+    var index = arr.findIndex(v=>v.id==id)
+    if(index>-1){
+        return level;
+    }
+    var brr = [];
+    for(var i=0;i<arr.length;i++){
+        for(var j=0;j<data.length;j++){
+            if(data[j].pid===arr[i].id){
+                brr.push(data[j])
+            }
+        }
+    }
+    if(brr.length!==0){
+        level++;
+        return getLevel(data,brr,level)
+    }else{
+        return level
+    }
+}
+</script>
+</html>

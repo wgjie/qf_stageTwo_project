@@ -1,0 +1,105 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>商品分类</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/layer/layer.js"></script>
+    <script src="./js/cookie.js"></script>
+    <script src="./js/page.js"></script>
+    <script src="./js/checkLogin.js"></script>
+    <style>
+    table{
+        height:400px;
+    }
+    </style>
+</head>
+<body>
+<center>
+    <table border=1 width="80%">
+        <caption><h3 style="position:relative;">分类列表<a style="position:absolute;font-size:14px;right:300px;top:5px;color:red;text-decoration:none;border:1px solid #ccc;padding:4px 10px;background-color:#eee;" href="addCat.html" target="right">添加</a></a></h3></caption>
+        <thead>
+            <tr>
+                <th>分类名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="page"></div>
+</center>
+</body>
+<script>
+var loadindex = layer.load(1, {shade: [0.9,'#000']})
+var idArr = location.search.match(/id=(\d+)/);
+if(idArr){
+    var pid = idArr[1]
+}else{
+    var pid = 1;
+}
+$.ajax({
+    url:"./php/getCat.php",
+    data:{pid},
+    dataType:"json",
+    type:"get",
+    success(res){
+        var {meta:{status,msg},data} = res;
+        data.reverse()
+        if(status===0){
+            var pageSize = 10;
+            new Page('page',{
+                pageInfo:{
+                    pageSize,
+                    total:data.length
+                },
+                show(currentPage){
+                    var arr = data.slice((currentPage-1)*pageSize,currentPage*pageSize)
+                    var html = '';
+                    arr.forEach((v,i)=>{
+                        if(i%2){
+                            html += '<tr bgcolor="skyblue">';
+                        }else{
+                            html += '<tr bgcolor="pink">';
+                        }
+                            html += `<td>${v.name}</td>`;
+                            html += `<td><a href="goodsCat.html?id=${v.id}">查看更多</a>&nbsp;<a href="editCat.html?id=${v.id}" target="right">修改</a>&nbsp;<a class="deleteCat" data-id="${v.id}" href="javascript:;">删除</a></td>`;
+                        html += "</tr>";
+                        
+                    })
+                    $('tbody').html(html)
+                    layer.close(loadindex)
+                }
+            })
+            $('.deleteCat').click(function(){
+                var _this = $(this);
+                layer.confirm("你确定要删除吗？",{
+                    btn:['删除','取消'],
+                },
+                function(){
+                    var loadindex = layer.load(0, {shade: [0.9,'#000']});
+                    var id = _this.attr('data-id');
+                    var that = _this;
+                    $.ajax({
+                        url:'php/delCat.php',
+                        dataType:'json',
+                        data:{id},
+                        success:function(res){
+                            var {meta:{msg,status}} = res;
+                            layer.close(loadindex)
+                            if(status===0){
+                                layer.msg(msg,{icon:1,time:1500},function(){
+                                    that.parent().parent().remove()
+                                })
+                            }else{
+                                layer.msg(msg,{icon:2,time:1500})
+                            }
+                        }
+                    })
+                })
+            })
+        }
+    }
+})
+</script>
+</html>

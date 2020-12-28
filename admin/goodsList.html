@@ -1,0 +1,123 @@
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <meta name="referrer" content="never">
+    <title>商品列表</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/layer/layer.js"></script>
+    <script src="./js/cookie.js"></script>
+    <script src="./js/page.js"></script>
+    <script src="./js/checkLogin.js"></script>
+    <style>
+       
+    .introduce{
+        display: -webkit-box;
+        overflow: hidden;
+        white-space: normal !important;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical
+    }
+    table{
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+<center>
+    <table border=1 width="80%" align="center">
+        <caption><h3 style="position:relative;">商品列表<a style="position:absolute;font-size:14px;right:300px;top:5px;color:red;text-decoration:none;border:1px solid #ccc;padding:4px 10px;background-color:#eee;" href="goodsAdd.html" target="right">添加</a></a></h3></caption>
+        <thead>
+            <tr>
+                <th>商品名称</th>
+                <th>商品图片</th>
+                <th>商品价格</th>
+                <th>商品描述</th>
+                <th>商品库存</th>
+                <th>是否首页显示</th>
+                <th style="width:100px;">操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="page">
+        <!-- <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+        </ul> -->
+    </div>
+</center>
+</body>
+<script>
+var loadindex = layer.load(0, {shade: [0.9,'#000']});
+$.ajax({
+    url:'./php/goodslist.php',
+    dataType:'json',
+    success(res){
+        var {meta:{status,msg},data} = res;
+        data.reverse()
+        if(status===0){
+            var pageSize = 5;
+            new Page('page',{
+                pageInfo:{
+                    pageSize,
+                    total:data.length
+                },
+                show(currentPage){
+                    var arr = data.slice((currentPage-1)*pageSize,currentPage*pageSize)
+                    var html = '';
+                    arr.forEach(v=>{
+                        html += `
+                            <tr>
+                                <td width="100">${v.name}</td>
+                                <td width="80"><img src="${v.imgpath.split('==========')[0]}" width="50" height="50"></td>
+                                <td width="80">${v.price}</td>
+                                <td class="introduce">${v.introduce}</td>
+                                <td width="80">${v.stock}</td>
+                                <td width="100">${v.isshowindex?"是":"否"}</td>
+                                <td width="80">
+                                    <a href="editGoods.html?id=${v.id}">修改</a>&nbsp;
+                                    <a href="javascript:;" class="delete" data-id="${v.id}">删除</a>
+                                </td>
+                            </tr>
+                        `
+                    })
+                    $('tbody').html(html)
+                    $('a.delete').click(function(){
+                        var id = $(this).attr('data-id')
+                        var that = $(this)
+                        layer.confirm('你确定要删除吗？', {
+                            btn: ['确定','取消'] //按钮
+                        }, function(){
+                            var loadindex = layer.load(0, {shade: [0.9,'#000']});
+                            $.ajax({
+                                url:'./php/goodsDel.php',
+                                data:{id},
+                                dataType:"json",
+                                success(res){
+                                    layer.close(loadindex)
+                                    var {meta:{status,msg}} = res;
+                                    if(status===0){
+                                        layer.msg(msg,{icon:1,time:1500})
+                                        that.parent().parent().remove()
+                                    }else{
+                                        layer.msg(msg,{icon:2,time:1500})
+                                    }
+                                }
+                            })
+                        });
+                    })
+                }
+            })
+            layer.close(loadindex);
+        }else{
+            layer.close(loadindex)
+            layer.msg(msg,{icon:2,time:1500})
+        }
+    }
+})
+</script>
+</html>

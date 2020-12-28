@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>列表页</title>
+<!-- 禁止检查当前域名 -->
+<meta name="referrer" content="never">
+<!-- 网站图标 -->
+<link rel="shortcut icon" href="favicon.ico" />
+<!-- 初始化css文件：用来将所有浏览器中显示不一样的样式，变的一样 -->
+<link rel="stylesheet" href="./css/normalize.css">
+<!-- 引入bootstrap -->
+<link rel="stylesheet" href="./css/bootstrap.css">
+<!-- 公共样式 -->
+<link rel="stylesheet" href="./css/common.css">
+<!-- 当前文件的css -->
+<link rel="stylesheet" href="./css/list.css?b=4">
+<!-- 引入js的库 -->
+<script src="./js/jquery.min.js"></script>
+<!-- 引入bootstrap.js，bootstrap的js需要依赖一个js库 -->
+<script src="./js/bootstrap.js"></script>
+<!-- 引入cookie的js -->
+<script src="./js/cookie.js"></script>
+<script src="./js/layer/layer.js"></script>
+<script src="./js/ajax.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/list.js"></script>
+<script src="./js/page.js"></script>
+</head>
+<body>
+<!-- 顶部 -->
+<div class="wrap navbar-default">
+    <div class="content">
+        <nav class="navbar">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand logo" href="index.html">
+                        <img src="./images/logo.jpg" alt="">
+                    </a>
+                </div>
+            
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">首页 </a></li>
+                        <li class="active"><a href="index.html">列表页 <span class="sr-only">(current)</span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">省份 <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu province">
+                                <!-- <li><a href="#">北京</a></li>
+                                <li><a href="#">安徽</a></li> -->
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="景点名称">
+                        </div>
+                        <button type="submit" class="btn btn-default">搜索</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">热门景点 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                            <li><a href="#">黄山</a></li>
+                            <li><a href="#">九华山</a></li>
+                            <li><a href="#">皇藏峪</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">雷池</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- 登陆注册 -->
+                    <ul class="nav navbar-nav navbar-right login">
+                        <li><a href="login.html">登陆</a></li>
+                        <li><a href="register.html">注册</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>
+<!-- 面包屑 -->
+<div class="wrap">
+    <div class="content">
+        <div class="jumbotron descipt">
+            <h2>本站简介</h2>
+            <p class="info">旅游网是旅游组织向公众展示旅游信息的平台，有官方旅游网站，也有私人旅游网站，官方的侧重政务，私人的侧重旅游市场及宣传，向广大旅游朋友提供旅游相关信息资讯、产品等信息。
+            中国的旅游网在1996年开始出现。旅游是大众趋势，互联网已经成为最大的传媒之一，因此旅游网发展速度非常快，每年都有成千上万家旅游网站出现，截至2012年底具有一定旅游资讯能力的旅游网有5000多家，其中专业旅游网300余家。</p>
+            <p><a class="btn btn-primary btn-lg" href="#scenics" role="button">查看景点</a></p>
+        </div>
+        <ol class="breadcrumb">
+            <li><a href="index.html">首页</a></li>
+            <li class="active"><a href="javascript:;">列表页</a></li>
+        </ol>
+    </div>
+</div>
+
+<!-- 景点列表 -->
+<div class="wrap" id="scenics">
+    <div class="content">
+        <h1>旅游网站 <small>所有景点</small></h1>
+        <div class="container fluid">
+            <div class="row scenics">
+                
+                <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="thumbnail">
+                        <img src="http://5b0988e595225.cdn.sohucs.com/images/20171222/014e9fc392984995bb10bf8b40385bb0.jpeg" alt="...">
+                        <div class="caption">
+                            <h3>颐和园</h3>
+                            <p>阿斯顿发斯蒂芬阿斯蒂芬</p>
+                            <p>
+                                <a href="#" class="btn btn-default" role="button">查看详情</a>
+                            </p>
+                        </div>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page"></div>
+<!-- 底部 -->
+<div class="wrap footer">
+    <div class="content">
+        <ul class="nav nav-pills">
+            <li role="presentation">
+                <a href="">关于千峰</a>
+            </li>
+            <li role="presentation">
+                <a href="">联系我们</a>
+            </li>
+            <li role="presentation">
+                <a href="">企业合作</a>
+            </li>
+            <li role="presentation">
+                <a href="">招贤纳士</a>
+            </li>
+            <li role="presentation">
+                <a href="">报名咨询</a>
+            </li>
+            <li role="presentation">
+                <a href="">教学视频</a>
+            </li>
+            <li role="presentation">
+                <a href="">学员论坛</a>
+            </li>
+            <li role="presentation">
+                <a href="">网站地图</a>
+            </li>
+        </ul>
+        <p>Copyright 2011-2020 北京千锋互联科技有限公司 京ICP备12003911号-3  京公网安备 11010802030320号</p>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+
+</script>
+</html>

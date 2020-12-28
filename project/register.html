@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>注册页面</title>
+<!-- 网站图标 -->
+<link rel="shortcut icon" href="favicon.ico" />
+<!-- 初始化css文件：用来将所有浏览器中显示不一样的样式，变的一样 -->
+<link rel="stylesheet" href="./css/normalize.css">
+<!-- 引入bootstrap -->
+<link rel="stylesheet" href="./css/bootstrap.css">
+<!-- 公共样式 -->
+<link rel="stylesheet" href="./css/common.css">
+<!-- 当前文件的css -->
+<link rel="stylesheet" href="./css/register.css">
+<!-- 引入js的库 -->
+<script src="./js/jquery.min.js"></script>
+<!-- 引入bootstrap.js，bootstrap的js需要依赖一个js库 -->
+<script src="./js/bootstrap.js"></script>
+<!-- 引入ajax文件 -->
+<script src="./js/ajax.js"></script>
+<!-- 引入layer -->
+<script src="./js/layer/layer.js"></script>
+</head>
+<body>
+<!-- 顶部 -->
+<div class="wrap navbar-default">
+    <div class="content">
+        <nav class="navbar">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand logo" href="index.html">
+                        <img src="./images/logo.jpg" alt="">
+                    </a>
+                </div>
+            
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="index.html">首页 <span class="sr-only">(current)</span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">省份 <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">北京</a></li>
+                                <li><a href="#">安徽</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="景点名称">
+                        </div>
+                        <button type="submit" class="btn btn-default">搜索</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">热门景点 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                            <li><a href="#">黄山</a></li>
+                            <li><a href="#">九华山</a></li>
+                            <li><a href="#">皇藏峪</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">雷池</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>
+<!-- 注册表单 -->
+<div class="wrap">
+    <div class="content">
+        <h1 class="text-center">旅游网站 <small>注册页面</small></h1>
+        <form class="form-horizontal register">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+                <div class="col-sm-10">
+                <input type="text" name="username" class="form-control" placeholder="用户名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-10">
+                <input type="password" class="form-control" name="password" placeholder="密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                <div class="col-sm-10">
+                <input type="password" class="form-control" name="repass" placeholder="确认密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">邮箱</label>
+                <div class="col-sm-10">
+                <input type="text" class="form-control" name="email" placeholder="邮箱">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">手机号</label>
+                <div class="col-sm-10">
+                <input type="text" class="form-control" name="tel" placeholder="手机号">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                    <input type="checkbox" name="agree"> 请同意协议
+                    </label>
+                </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-default submit">Sign Up</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- 底部 -->
+<div class="wrap footer">
+    <div class="content">
+        <ul class="nav nav-pills">
+            <li role="presentation">
+                <a href="">关于千峰</a>
+            </li>
+            <li role="presentation">
+                <a href="">联系我们</a>
+            </li>
+            <li role="presentation">
+                <a href="">企业合作</a>
+            </li>
+            <li role="presentation">
+                <a href="">招贤纳士</a>
+            </li>
+            <li role="presentation">
+                <a href="">报名咨询</a>
+            </li>
+            <li role="presentation">
+                <a href="">教学视频</a>
+            </li>
+            <li role="presentation">
+                <a href="">学员论坛</a>
+            </li>
+            <li role="presentation">
+                <a href="">网站地图</a>
+            </li>
+        </ul>
+        <p>Copyright 2011-2020 北京千锋互联科技有限公司 京ICP备12003911号-3  京公网安备 11010802030320号</p>
+    </div>
+</div>
+</body>
+<script src="./js/register.js"></script>
+<script type="text/javascript">
+
+</script>
+</html>
